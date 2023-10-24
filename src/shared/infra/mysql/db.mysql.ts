@@ -1,7 +1,7 @@
 import * as mysql from 'mysql2/promise';
-import { formatDataToInsert } from './utils/formatDataToInsertMySql';
-import { DATABASE_CONFIG } from '../../../../apps/express/config/consts';
+import { DATABASE_CONFIG } from '../../../../config/consts';
 import { formatArray } from '../../utils/formatResponse';
+import { formatDataToInsert } from '../../utils/formatData.sql';
 
 const connectionConfig = {
   host: DATABASE_CONFIG.host,
@@ -65,13 +65,14 @@ async function deleteRecord(table: string, id: number): Promise<number> {
 async function getAllFromTable<T>(table: string): Promise<T[]> {
   const sql = `SELECT * FROM ${table}`;
   const [rows] = await connection.query(sql);
-  return rows as T[];
+
+  return rows && (rows as T[]).length ? formatArray(rows as T[]) as T[] : [];
 }
 
 async function findMany<T>(sql: string, params: any[] = []): Promise<T[]> {
   const [rows] = await connection.query(sql, params);
 
-  return rows && (rows as T[]).length ? formatArray(rows) : [];
+  return rows && (rows as T[]).length ? formatArray(rows) as T[] : [];
 }
 
 async function getFirst<T>(sql: string, params: any[] = []): Promise<T> {

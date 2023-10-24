@@ -12,6 +12,8 @@ export class ValidateDataCreateOrUpdateUserValidator implements ValidateDataRepo
         identification: 'required|max:50',
         names: 'required|max:255',
         lastnames: 'required|max:255',
+        weight: 'required|numeric',
+        height: 'required|numeric',
       },
       roles: 'required|array',
     };

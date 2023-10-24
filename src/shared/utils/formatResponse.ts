@@ -61,9 +61,13 @@ function validateNullObjects(item) {
         (value) => value === null,
       );
 
-      if (allPropsNull) {
+      if (allPropsNull && !['createdAt', 'updatedAt'].includes(key)) {
         newItem[key] = {}; // Reemplaza el objeto interno con uno vacío.
       }
+
+      // if (allPropsNull) {
+      //   newItem[key] = {}; // Reemplaza el objeto interno con uno vacío.
+      // }
     }
   });
 

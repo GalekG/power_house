@@ -1,7 +1,7 @@
 import { RolesModel } from '../../../shared/domain/models/roles.model';
 import { UserRolesWithRolesModel } from '../../../shared/domain/models/userRoles.model';
 import { findMany } from '../../../shared/infra/mysql/db.mysql';
-import { generateSelectFieldsSQL } from '../../../shared/utils/generateSelectFields.sql';
+import { generateSelectFieldsSQL } from '../../../shared/utils/formatData.sql';
 import { GetUserRolesByUserIdRepository } from '../domain/repositories/getUserRolesByUserId.repository';
 
 export class GetUserRolesByUserIdMySql implements GetUserRolesByUserIdRepository {
