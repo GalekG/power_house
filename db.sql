@@ -28,8 +28,6 @@ CREATE TABLE `DaysOfWeek` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `DaysOfWeek` */
-
 /*Table structure for table `ExerciseMachines` */
 
 DROP TABLE IF EXISTS `ExerciseMachines`;
@@ -47,8 +45,6 @@ CREATE TABLE `ExerciseMachines` (
   CONSTRAINT `exercisemachines_ibfk_2` FOREIGN KEY (`machineId`) REFERENCES `Machines` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `ExerciseMachines` */
-
 /*Table structure for table `Exercises` */
 
 DROP TABLE IF EXISTS `Exercises`;
@@ -63,8 +59,6 @@ CREATE TABLE `Exercises` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `Exercises` */
-
 /*Table structure for table `Genders` */
 
 DROP TABLE IF EXISTS `Genders`;
@@ -77,12 +71,6 @@ CREATE TABLE `Genders` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `Genders` */
-
-insert  into `Genders`(`id`,`name`,`createdAt`,`updatedAt`) values 
-(1,'Hombre','2023-10-23 22:22:20',NULL),
-(2,'Mujer','2023-10-23 22:22:27',NULL);
-
 /*Table structure for table `Machines` */
 
 DROP TABLE IF EXISTS `Machines`;
@@ -93,12 +81,10 @@ CREATE TABLE `Machines` (
   `description` text DEFAULT NULL,
   `muscleGroup` varchar(30) NOT NULL,
   `quantity` int(11) DEFAULT 1,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
+  `createdAt` timestamp NULL DEFAULT NULL,
+  `updatedAt` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `Machines` */
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Table structure for table `Memberships` */
 
@@ -114,8 +100,6 @@ CREATE TABLE `Memberships` (
   CONSTRAINT `memberships_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `Memberships` */
-
 /*Table structure for table `Roles` */
 
 DROP TABLE IF EXISTS `Roles`;
@@ -128,12 +112,6 @@ CREATE TABLE `Roles` (
   `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `Roles` */
-
-insert  into `Roles`(`id`,`name`,`description`,`createdAt`,`updatedAt`) values 
-(1,'admin','Administrador del sistema','2023-10-23 22:21:53',NULL),
-(2,'usuario','Cliente del gimnasio','2023-10-23 22:21:56',NULL);
 
 /*Table structure for table `RoutineSchedules` */
 
@@ -151,11 +129,24 @@ CREATE TABLE `RoutineSchedules` (
   KEY `routineId` (`routineId`),
   KEY `dayOfWeekId` (`dayOfWeekId`),
   CONSTRAINT `routineschedules_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`),
-  CONSTRAINT `routineschedules_ibfk_2` FOREIGN KEY (`routineId`) REFERENCES `WorkoutRoutines` (`id`),
+  CONSTRAINT `routineschedules_ibfk_2` FOREIGN KEY (`routineId`) REFERENCES `routines` (`id`),
   CONSTRAINT `routineschedules_ibfk_3` FOREIGN KEY (`dayOfWeekId`) REFERENCES `DaysOfWeek` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `RoutineSchedules` */
+/*Table structure for table `Routines` */
+
+DROP TABLE IF EXISTS `Routines`;
+
+CREATE TABLE `Routines` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) NOT NULL,
+  `description` text DEFAULT NULL,
+  `difficulty` varchar(25) DEFAULT 'Principiante',
+  `goal` varchar(25) NOT NULL,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 /*Table structure for table `RoutinesExercises` */
 
@@ -170,11 +161,9 @@ CREATE TABLE `RoutinesExercises` (
   PRIMARY KEY (`id`),
   KEY `routineId` (`routineId`),
   KEY `exerciseId` (`exerciseId`),
-  CONSTRAINT `routinesexercises_ibfk_1` FOREIGN KEY (`routineId`) REFERENCES `WorkoutRoutines` (`id`),
+  CONSTRAINT `routinesexercises_ibfk_1` FOREIGN KEY (`routineId`) REFERENCES `routines` (`id`),
   CONSTRAINT `routinesexercises_ibfk_2` FOREIGN KEY (`exerciseId`) REFERENCES `Exercises` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `RoutinesExercises` */
 
 /*Table structure for table `Transactions` */
 
@@ -193,8 +182,6 @@ CREATE TABLE `Transactions` (
   CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`membershipId`) REFERENCES `Memberships` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-/*Data for the table `Transactions` */
-
 /*Table structure for table `UserRoles` */
 
 DROP TABLE IF EXISTS `UserRoles`;
@@ -211,11 +198,6 @@ CREATE TABLE `UserRoles` (
   CONSTRAINT `userroles_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`),
   CONSTRAINT `userroles_ibfk_2` FOREIGN KEY (`roleId`) REFERENCES `Roles` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `UserRoles` */
-
-insert  into `UserRoles`(`id`,`userId`,`roleId`,`createdAt`,`updatedAt`) values 
-(1,4,1,'2023-10-24 00:06:51',NULL);
 
 /*Table structure for table `Users` */
 
@@ -241,28 +223,6 @@ CREATE TABLE `Users` (
   KEY `genderId` (`genderId`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`genderId`) REFERENCES `Genders` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `Users` */
-
-insert  into `Users`(`id`,`username`,`password`,`identification`,`names`,`lastnames`,`birthdate`,`email`,`address`,`weight`,`height`,`bloodType`,`genderId`,`createdAt`,`updatedAt`) values 
-(4,'admin','$2b$10$.6j9IucWq5AhKA6ypyEwoObBK1MEKUX1KWHEHIKqWwdoGd0sj1vf2','123','Administrador','del sistema','0000-00-00',NULL,NULL,65,178,NULL,1,'2023-10-24 00:06:51',NULL);
-
-/*Table structure for table `WorkoutRoutines` */
-
-DROP TABLE IF EXISTS `WorkoutRoutines`;
-
-CREATE TABLE `WorkoutRoutines` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) NOT NULL,
-  `description` text DEFAULT NULL,
-  `difficulty` varchar(25) DEFAULT 'Principiante',
-  `goal` varchar(25) NOT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-/*Data for the table `WorkoutRoutines` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
